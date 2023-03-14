@@ -25,6 +25,13 @@ docker-compose up --build
 ```
 Client configurations are described in settings.conf.
 ## Example:
+If the address is not specified, it is taken from the settings.conf file.
+Structure settings.conf:
+```
+[Settings]
+host = 127.0.0.1
+port = 8008
+```
 ### get_list
 ```
 clients get_list
