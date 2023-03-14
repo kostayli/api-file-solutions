@@ -66,3 +66,8 @@ clients delete <NameFile>
 clients 127.0.0.1:8008 delete <NameFile> 
 ```
 NameFile - parameter of the path of the file for deleting on serve
+##Documention
+```
+http://localhost:8008/redoc 
+http://localhost:8008/docs
+```
