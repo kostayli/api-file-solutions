@@ -17,9 +17,9 @@ def custom_openapi() -> dict[str: any]:
     if app.openapi_schema:
         return app.openapi_schema
     openapi_schema: dict[str: any] = get_openapi(
-        title="Custom title",
-        version="2.5.0",
-        description="This is a very custom OpenAPI schema",
+        title="Api-file-solutions",
+        version="1.0",
+        description="This is a very custom OpenAPI schema for Api-file-solutions",
         routes=app.routes,
     )
     openapi_schema["info"]["x-logo"] = {
