@@ -43,26 +43,26 @@ clients 127.0.0.1:8008 get_list
 clients get_file <NameFile> <NamePath>
 clients 127.0.0.1:8008 get_file <NameFile> <NamePath>
 ```
-<NameFile> - parameter of the name of the file to download
-<NamePath> - the parameter of the name of the directory where the download will be performed
+NameFile - parameter of the name of the file to download
+NamePath - the parameter of the name of the directory where the download will be performed
 
  ### upload
 ```
 clients upload <NameFile> 
 clients 127.0.0.1:8008 upload <NameFile> 
 ```
-<NameFile> - parameter of the path of the file for uploading on server
+NameFile - parameter of the path of the file for uploading on server
   
 ### update
 ```
 clients update <NameFile> 
 clients 127.0.0.1:8008 update <NameFile> 
 ```
-<NameFile> - parameter of the path of the file for updating on serve
+NameFile - parameter of the path of the file for updating on serve
   
 ### delete
 ```
 clients delete <NameFile> 
 clients 127.0.0.1:8008 delete <NameFile> 
 ```
-<NameFile> - parameter of the path of the file for deleting on serve
+NameFile - parameter of the path of the file for deleting on serve
