@@ -43,7 +43,7 @@ clients 127.0.0.1:8008 get_list
 clients get_file <NameFile> <NamePath>
 clients 127.0.0.1:8008 get_file <NameFile> <NamePath>
 ```
-NameFile - parameter of the name of the file to download
+NameFile - parameter of the name of the file to download\
 NamePath - the parameter of the name of the directory where the download will be performed
 
  ### upload
