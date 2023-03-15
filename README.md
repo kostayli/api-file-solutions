@@ -35,13 +35,12 @@ port = 8008
 ### get_list_file
 ```
 clients get_list_file
-clients get_list_file 127.0.0.1:8008
+clients get_list_file <Host:Port>
 ```
-
 ### get_file
 ```
 clients get_file <NameFile> <NamePath>
-clients get_file <NameFile> <NamePath> 127.0.0.1:8008
+clients get_file <NameFile> <NamePath> <Host:Port>
 ```
 NameFile - parameter of the name of the file to download\
 NamePath - the parameter of the name of the directory where the download will be performed
@@ -49,21 +48,21 @@ NamePath - the parameter of the name of the directory where the download will be
  ### upload
 ```
 clients upload <NameFile> 
-clients upload <NameFile> 127.0.0.1:8008
+clients upload <NameFile> <Host:Port>
 ```
 NameFile - parameter of the path of the file for uploading on server
   
 ### update
 ```
 clients update <NameFile> 
-clients update <NameFile> 127.0.0.1:8008
+clients update <NameFile> <Host:Port>
 ```
 NameFile - parameter of the path of the file for updating on serve
   
 ### delete
 ```
 clients delete <NameFile> 
-clients delete <NameFile> 127.0.0.1:8008
+clients delete <NameFile> <Host:Port>
 ```
 NameFile - parameter of the path of the file for deleting on serve
 
