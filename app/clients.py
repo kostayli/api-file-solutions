@@ -3,9 +3,9 @@ import os
 import sys
 
 import requests
-from requests import RequestException, Response
-
-host_port: str = ''
+from requests import Response, RequestException
+from requests.adapters import HTTPAdapter
+from urllib3 import Retry
 
 
 def crud_config(path) -> str:
@@ -18,27 +18,29 @@ def crud_config(path) -> str:
     return host + ":" + port
 
 
-try:
-    if sys.argv[1].__contains__(':'):
-        host_port = sys.argv[1]
-    else:
-        host_port = crud_config('settings.conf')
-except:
-    print(f"Error!!!")
-
-
-def get_list_file() -> None:
+def get_list_file(host_port: str = crud_config('settings.conf')) -> dict[str: str]:
     url: str = 'http://' + host_port + '/get_list_files'
+    session = requests.Session()
+    retry = Retry(connect=3, backoff_factor=0.5)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
     response: Response = requests.get(url=url)
     result: dict[str: str] = response.json()
     if len(result) == 0:
         print("No files on directory!")
     for data in result:
         print("Filename: " + data + ", Hash: " + result[data])
+    return result
 
 
-def get_file(name: str, path: str) -> None:
+def get_file(name: str, path: str, host_port: str = crud_config('settings.conf')) -> int:
     url: str = 'http://' + host_port + '/get__file?name=' + name
+    session = requests.Session()
+    retry = Retry(connect=3, backoff_factor=0.5)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
     response = requests.get(url=url, stream=True)
     if response.status_code == 200:
         path_dir_name: list[str] = path.split('/')
@@ -51,75 +53,87 @@ def get_file(name: str, path: str) -> None:
             for chunk in response:
                 f.write(chunk)
         print('Ok')
+        return 1
     else:
         print('HeOk')
+        return 0
 
 
-def upload(path: str) -> None:
+def upload(path: str, host_port: str = crud_config('settings.conf')) -> int:
     url: str = 'http://' + host_port + '/upload'
+    session = requests.Session()
+    retry = Retry(connect=3, backoff_factor=0.5)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
     try:
-        file: dict[str: any] = {'file': open(path, 'rb')}
-        response: Response = requests.put(url=url, files=file)
+        file = open(path, 'rb')
+        file_to_upload: dict[str: any] = {'file': file}
+        response: Response = requests.put(url=url, files=file_to_upload)
+        file.close()
         if response.status_code == 200:
             print('Ok')
+            return 1
         else:
             print('HeOk')
+            return 0
     except:
         print('HeOk')
+        return 0
 
 
-def update(path: str) -> None:
+def update(path: str, host_port: str = crud_config('settings.conf')) -> int:
     url: str = 'http://' + host_port + '/update'
+    session = requests.Session()
+    retry = Retry(connect=3, backoff_factor=0.5)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
     try:
-        file: dict[str: any] = {'file': open(path, 'rb')}
-        response: Response = requests.post(url=url, files=file)
+        file = open(path, 'rb')
+        file_to_update: dict[str: any] = {'file': file}
+        response: Response = requests.post(url=url, files=file_to_update)
+        file.close()
         if response.status_code == 200:
             print('Ok')
+            return 1
         else:
             print('HeOk')
+            return 0
     except:
         print('HeOk')
+        return 0
 
 
-def delete_file_from_server(path: str) -> None:
+def delete(path: str, host_port: str = crud_config('settings.conf')) -> int:
     url: str = 'http://' + host_port + '/remove_file?file=' + path
+    session = requests.Session()
+    retry = Retry(connect=3, backoff_factor=0.5)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
     response: Response = requests.delete(url=url)
     if response.status_code == 200:
         print('Ok')
+        return 1
     else:
         print('HeOk')
+        return 0
 
 
 if __name__ == '__main__':
-    for param in sys.argv:
-        try:
-            if param == 'get_list':
-                if len(sys.argv) <= 3:
-                    get_list_file()
-                else:
-                    print("Error param!!!")
-            elif param == 'get_file':
-                if len(sys.argv) == 5:
-                    get_file(sys.argv[3], sys.argv[4])
-                else:
-                    get_file(sys.argv[2], sys.argv[3])
-            elif param == 'upload':
-                if len(sys.argv) == 4:
-                    upload(sys.argv[3])
-                else:
-                    upload(sys.argv[2])
-            elif param == 'update':
-                if len(sys.argv) == 4:
-                    update(sys.argv[3])
-                else:
-                    update(sys.argv[2])
-            elif param == 'delete':
-                if len(sys.argv) == 4:
-                    delete_file_from_server(sys.argv[3])
-                else:
-                    delete_file_from_server(sys.argv[2])
-        except RequestException:
-            print(f"Error connection!!!")
-            break
-        except:
-            print("Error!!!")
+    try:
+        if len(sys.argv) == 5:
+            globals()[sys.argv[1]](sys.argv[2], sys.argv[3], sys.argv[4])
+        elif len(sys.argv) == 4:
+            globals()[sys.argv[1]](sys.argv[2], sys.argv[3])
+        elif len(sys.argv) == 3:
+            globals()[sys.argv[1]](sys.argv[2])
+        elif len(sys.argv) == 2:
+            globals()[sys.argv[1]]()
+        else:
+            print("Error param!!!")
+    except RequestException:
+        print(f"Error connection!!!")
+    except:
+        print("Error!!!")
