@@ -19,10 +19,6 @@ Server configurations are described in dockerfile and docker-compose.yml.
 ## Code downloading
 Download clients : https://github.com/kostayli/api-file-solutions/releases/download/v1.0/clients.zip
 
-
-```
-docker-compose up --build
-```
 Client configurations are described in settings.conf.
 ## Example:
 If the address is not specified, it is taken from the settings.conf file.
